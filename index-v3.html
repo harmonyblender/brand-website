@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>하모니블렌더 — Brand Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ── */
+    :root {
+      --bg:        #ffffff;
+      --black:     #0a0a0a;
+      --gray-1:    #1a1a1a;
+      --gray-2:    #444444;
+      --gray-3:    #888888;
+      --gray-4:    #bbbbbb;
+      --gray-5:    #e2e2de;
+      --off-white: #f5f5f0;
+      --font-sans: 'Noto Sans KR', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --pad-x: 80px;
+      --pad-section: 120px var(--pad-x);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--black);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-top: 2px solid var(--black);
+      border-bottom: 1px solid transparent;
+      transition: border-bottom-color 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px var(--pad-x);
+    }
+    nav.scrolled { border-bottom-color: var(--gray-5); }
+
+    .nav-name {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray-2);
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      color: var(--black);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      padding: 0 var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 24px;
+    }
+
+    .hero-name {
+      font-family: var(--font-sans);
+      font-size: clamp(40px, 5vw, 56px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--black);
+      margin-bottom: 32px;
+    }
+
+    .hero-intro {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-2);
+      line-height: 1.9;
+      max-width: 520px;
+      margin-bottom: 52px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 3px;
+    }
+    .hero-cta:hover { gap: 18px; transition: gap 0.25s; }
+
+    /* ── SECTION BASE ── */
+    .section {
+      padding: var(--pad-section);
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 48px;
+    }
+
+    /* ── WORKS ── */
+    #works { padding-left: 0; padding-right: 0; }
+    #works > .eyebrow { padding: 0 var(--pad-x); }
+    #works > .works-group { padding: 0 var(--pad-x); }
+
+    /* 슬라이더 */
+    .slider-wrap {
+      position: relative;
+      margin-bottom: 0;
+      overflow: hidden;
+    }
+
+    .slider-track {
+      display: flex;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .slider-track::-webkit-scrollbar { display: none; }
+
+    .slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 슬라이드 내부: 이미지(좌) + 텍스트 패널(우) */
+    .slide-inner {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      min-height: 520px;
+    }
+
+    .slide-img {
+      background: #d4cfc8;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide:nth-child(2) .slide-img { background: #c8cdd1; }
+
+    .slide-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-info {
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      border-left: 1px solid var(--gray-5);
+    }
+
+    .slide-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-3);
+      letter-spacing: 0.1em;
+    }
+
+    .slide-name {
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--black);
+    }
+
+    .slide-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--gray-2);
+      line-height: 1.75;
+    }
+
+    .slide-role {
+      font-size: 11px;
+      color: var(--gray-3);
+      line-height: 1.6;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-5);
+    }
+
+    .slide-metrics {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-5);
+    }
+
+    .slide-metrics li {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-3);
+      line-height: 1.5;
+    }
+
+    .slide-metrics li strong {
+      color: var(--black);
+      font-weight: 400;
+    }
+
+    /* 슬라이더 하단 컨트롤 바 */
+    .slider-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 16px var(--pad-x) 48px;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .slider-counter {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-4);
+      letter-spacing: 0.08em;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .slider-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 18px;
+      color: var(--gray-2);
+      line-height: 1;
+      transition: color 0.15s;
+      display: flex;
+      align-items: center;
+    }
+    .slider-btn:hover { color: var(--black); }
+    .slider-btn:disabled { color: var(--gray-5); cursor: default; }
+
+    /* 프로젝트 테이블 */
+    .works-group { margin-bottom: 0; }
+
+    .works-group-header {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      padding: 24px 0 10px;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .works-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-5);
+      cursor: default;
+      transition: background 0.15s;
+    }
+    .works-row:hover {
+      background: var(--off-white);
+      margin: 0 calc(-1 * var(--pad-x));
+      padding: 14px var(--pad-x);
+    }
+
+    .works-project {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--black);
+    }
+
+    .works-role {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--gray-3);
+      letter-spacing: 0.04em;
+      padding-right: 48px;
+    }
+
+    .works-yr {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--gray-4);
+    }
+
+    /* 그룹 간 간격 */
+    .works-group-gap { padding-top: 16px; }
+
+    /* ── ABOUT ── */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-1);
+      line-height: 1.9;
+    }
+
+    .about-text p + p { margin-top: 20px; }
+
+    /* 역량 목록 */
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 40px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 20px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-5);
+    }
+    .skill-row:first-child { border-top: 1px solid var(--gray-5); }
+
+    .skill-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      padding-top: 2px;
+    }
+
+    .skill-value {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--gray-2);
+      line-height: 1.6;
+    }
+
+    /* 툴 칩 */
+    .tools-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tool-chip {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border: 1px solid var(--gray-5);
+      color: var(--gray-3);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .tool-chip:hover { border-color: var(--gray-4); color: var(--gray-2); }
+
+    /* ── CONTACT ── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-message {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray-2);
+      line-height: 1.9;
+      max-width: 400px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--gray-5);
+    }
+    .contact-row:first-child { border-top: 1px solid var(--gray-5); }
+
+    .contact-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+    }
+
+    .contact-value {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contact-value a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .contact-arrow {
+      font-size: 12px;
+      color: var(--gray-4);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 28px var(--pad-x);
+      border-top: 1px solid var(--gray-5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--gray-4);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── WELCOME SCREEN ── */
+    #welcome-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.7s ease;
+    }
+    #welcome-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .welcome-eyebrow {
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #444;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .welcome-brand {
+      font-size: clamp(28px, 5vw, 60px);
+      font-weight: 300;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .welcome-cursor {
+      display: inline-block;
+      color: #ffffff;
+      margin-left: 2px;
+      animation: blink-cursor 0.7s step-end infinite;
+    }
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .welcome-skip {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .welcome-skip:hover { color: #666; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.5);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--bg);
+      width: 100%;
+      max-width: 540px;
+      padding: 48px;
+      position: relative;
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--gray-3);
+      line-height: 1;
+      padding: 4px;
+    }
+    .modal-close:hover { color: var(--black); }
+
+    .modal-eyebrow {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 36px;
+    }
+
+    .form-field { margin-bottom: 28px; }
+
+    .form-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 10px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--gray-5);
+      padding: 8px 0;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+    .form-input:focus,
+    .form-textarea:focus { border-bottom-color: var(--black); }
+    .form-input.error,
+    .form-textarea.error { border-bottom-color: #c0392b; }
+
+    .form-textarea { resize: none; height: 88px; line-height: 1.7; }
+
+    .form-error-msg {
+      font-size: 11px;
+      color: #c0392b;
+      margin-top: 6px;
+      display: none;
+    }
+    .form-error-msg.show { display: block; }
+
+    .form-submit {
+      width: 100%;
+      background: var(--black);
+      color: var(--bg);
+      border: none;
+      padding: 16px 24px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+    .form-submit:hover { background: var(--gray-1); }
+    .form-submit:disabled { background: var(--gray-4); cursor: default; }
+
+    /* 성공 상태 */
+    .modal-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 32px 0;
+      gap: 16px;
+    }
+    .modal-success.show { display: flex; }
+    .modal-form.hide { display: none; }
+
+    .success-icon {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--black);
+    }
+
+    .success-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--gray-3);
+      line-height: 1.8;
+    }
+
+    .success-close {
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 2px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+
+    /* 문의하기 버튼 (Contact 섹션) */
+    .contact-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 32px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--black);
+      padding-bottom: 3px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .contact-cta:hover { gap: 18px; transition: gap 0.25s; }
+
+    /* 플로팅 버튼 */
+    .fab {
+      position: fixed;
+      bottom: 36px;
+      right: 40px;
+      z-index: 150;
+      background: var(--bg);
+      border: 1px solid var(--black);
+      padding: 13px 24px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .fab:hover { background: var(--black); color: var(--bg); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      :root { --pad-x: 40px; }
+      .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 56px; }
+    }
+
+    @media (max-width: 768px) {
+      .slide-inner {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        min-height: unset;
+      }
+      .slide-img {
+        aspect-ratio: 4 / 3;
+        min-height: unset;
+      }
+      .slide-info {
+        border-left: none;
+        border-top: 1px solid var(--gray-5);
+        padding: 28px 24px;
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      :root { --pad-x: 24px; }
+      .nav-links { gap: 20px; }
+      .works-role { display: none; }
+      .skill-row { grid-template-columns: 1fr; gap: 4px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- WELCOME SCREEN -->
+  <div id="welcome-screen">
+    <div>
+      <p class="welcome-eyebrow">welcome to</p>
+      <p class="welcome-brand">
+        <span id="welcomeText"></span><span class="welcome-cursor">|</span>
+      </p>
+    </div>
+    <span class="welcome-skip">click anywhere to enter</span>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <span class="nav-name">하모니블렌더</span>
+    <ul class="nav-links">
+      <li><a href="#works">Works</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">Brand Planner</p>
+    <h1 class="hero-name">하모니블렌더</h1>
+    <p class="hero-intro">
+      세상에 꼭 필요한 브랜드를 만든다는 믿음으로 일합니다.<br>
+      기획부터 운영까지 전 과정을 설계하고 실행합니다.
+    </p>
+    <a class="hero-cta" href="#works">프로젝트 보기 →</a>
+  </section>
+
+  <!-- WORKS -->
+  <section id="works" class="section">
+    <p class="eyebrow">Selected Work</p>
+
+    <!-- 풀사이즈 이미지 슬라이더 -->
+    <div class="slider-wrap">
+      <div class="slider-track" id="sliderTrack">
+
+        <!-- 슬라이드 1: 왓헤데 -->
+        <div class="slide">
+          <div class="slide-inner">
+            <div class="slide-img"></div>
+            <div class="slide-info">
+              <p class="slide-eyebrow">2024</p>
+              <h2 class="slide-name">왓헤데 (WxHxD)</h2>
+              <p class="slide-desc">K-직장인의 데스크 권태기 극복을 위한<br>데스크테리어 커뮤니티 커머스</p>
+              <p class="slide-role">Brand Director · 브랜드 전략 / 콘텐츠 기획 및 제작 / SNS 운영 / 광고 기획·집행</p>
+              <ul class="slide-metrics">
+                <li><strong>인스타그램 팔로워 5,000명</strong> — 런칭 4개월</li>
+                <li><strong>광고 협찬 10건 유치</strong> — 런칭 6개월</li>
+                <li><strong>CPC 225원 · CTR 6.52%</strong> · 팔로워당 비용 600원대</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 슬라이드 2: 위커밍 -->
+        <div class="slide">
+          <div class="slide-inner">
+            <div class="slide-img"></div>
+            <div class="slide-info">
+              <p class="slide-eyebrow">2021 – 2024</p>
+              <h2 class="slide-name">위커밍 (wecoming)</h2>
+              <p class="slide-desc">인구소멸지역 소상공인과 스몰브랜드를<br>잇는 온라인 커머스</p>
+              <p class="slide-role">Brand Director · 브랜드 컨셉 수립 / 큐레이션·소싱 / 콘텐츠 운영 / 크라우드펀딩</p>
+              <ul class="slide-metrics">
+                <li><strong>PB 달력 텀블벅 펀딩 420% 달성</strong></li>
+                <li><strong>브랜드 30개 · 제품 200개</strong> 입점 운영</li>
+                <li><strong>콜라보 시즌 매출 7천만원+</strong> · 솜마일 콜라보 3회</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 슬라이더 컨트롤 바 -->
+    <div class="slider-bar">
+      <div class="slider-controls">
+        <button class="slider-btn" id="slidePrev" aria-label="이전" disabled>←</button>
+        <span class="slider-counter" id="slideCounter">01 / 02</span>
+        <button class="slider-btn" id="slideNext" aria-label="다음">→</button>
+      </div>
+    </div>
+
+    <!-- 프로젝트 텍스트 테이블 -->
+    <div class="works-group">
+
+      <p class="works-group-header">런칭 브랜드</p>
+      <div class="works-row">
+        <span class="works-project">왓헤데 (WxHxD)</span>
+        <span class="works-role">브랜드 디렉팅</span>
+        <span class="works-yr">2024</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">위커밍 (wecoming)</span>
+        <span class="works-role">브랜드 디렉팅 · 커머스 운영</span>
+        <span class="works-yr">2021–24</span>
+      </div>
+
+      <p class="works-group-header works-group-gap">에이전시 프로젝트</p>
+      <div class="works-row">
+        <span class="works-project">슬로우드 — 원목 스윙 독서대</span>
+        <span class="works-role">세미 브랜딩 · 컨설팅</span>
+        <span class="works-yr">2024</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">KMCW × Flict — K-디지털 굿즈</span>
+        <span class="works-role">크라우드펀딩 기획</span>
+        <span class="works-yr">2024</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">Project1907 — 친환경 백팩</span>
+        <span class="works-role">크라우드펀딩 기획</span>
+        <span class="works-yr">2021</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">델리스 — 고체육수 '순간'</span>
+        <span class="works-role">크라우드펀딩 기획</span>
+        <span class="works-yr">2021</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">미추홀구사회적경제지원센터</span>
+        <span class="works-role">크라우드펀딩 컨설팅</span>
+        <span class="works-yr">2020</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">상상우리 × 하나TV — 바이소셜 캠페인</span>
+        <span class="works-role">유튜브 홍보 대행</span>
+        <span class="works-yr">2020</span>
+      </div>
+      <div class="works-row">
+        <span class="works-project">빅이슈 — 홈리스월드컵</span>
+        <span class="works-role">제품개발 · 크라우드펀딩</span>
+        <span class="works-yr">2018</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <p class="eyebrow">About</p>
+
+    <div class="about-layout">
+      <!-- 1인칭 소개 -->
+      <div>
+        <div class="about-text">
+          <p>
+            기획부터 운영까지 전 과정을 직접 설계하고 실행해온 기획자입니다.
+          </p>
+          <p>
+            브랜딩·마케팅 에이전시에서 7년간
+            스타트업, 스몰브랜드, 사회적기업, 비영리단체의
+            브랜드 런칭과 마케팅 대행을 경험했습니다.
+          </p>
+          <p>
+            이후 인하우스 브랜드 디렉터로서
+            데스크테리어 커뮤니티 '왓헤데'와
+            소상공인 커머스 '위커밍'을 직접 기획하고 운영했습니다.
+          </p>
+          <p>
+            "이 브랜드가 왜 지금 필요한가?"라는 질문에서 기획을 시작하고,<br>
+            멋짐보다 지속 가능성을 먼저 생각합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 역량 목록 + 툴 -->
+      <div>
+        <div class="skills-list">
+          <div class="skill-row">
+            <span class="skill-label">브랜드 전략</span>
+            <span class="skill-value">아이덴티티 수립, 포지셔닝, 브랜드 네이밍</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">콘텐츠 기획</span>
+            <span class="skill-value">오리지널 콘텐츠 기획, 촬영 디렉팅, SNS 운영</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">퍼포먼스</span>
+            <span class="skill-value">META·GA 기반 광고 기획/집행, A/B 테스트</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">크라우드펀딩</span>
+            <span class="skill-value">프로젝트 기획부터 펀딩 운영까지</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">팀 운영</span>
+            <span class="skill-value">최대 5인 팀 리딩, 외부 파트너 협업 전반</span>
+          </div>
+        </div>
+
+        <div class="tools-wrap">
+          <span class="tool-chip">Notion</span>
+          <span class="tool-chip">Meta Ads Manager</span>
+          <span class="tool-chip">Google Analytics</span>
+          <span class="tool-chip">Figma</span>
+          <span class="tool-chip">Canva</span>
+          <span class="tool-chip">텀블벅</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section" style="border-bottom:none;">
+    <p class="eyebrow">Contact</p>
+
+    <div class="contact-layout">
+      <div>
+        <p class="contact-message">
+          기획의 시작은 '왜 지금 이 브랜드여야 할까?'라는 질문입니다.<br>
+          함께 그 질문을 던져볼 분을 기다립니다.
+        </p>
+        <button class="contact-cta" onclick="openModal()">문의하기 →</button>
+      </div>
+
+      <div class="contact-links">
+        <div class="contact-row">
+          <span class="contact-label">Brunch</span>
+          <span class="contact-value">
+            <a href="https://brunch.co.kr/@slowlybutsurely/" target="_blank" rel="noopener">brunch.co.kr/@slowlybutsurely</a>
+            <span class="contact-arrow">↗</span>
+          </span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">YouTube</span>
+          <span class="contact-value">
+            <a href="#" target="_blank" rel="noopener">유튜브 채널</a>
+            <span class="contact-arrow">↗</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 플로팅 문의 버튼 -->
+  <button class="fab" onclick="openModal()">문의하기</button>
+
+  <!-- 문의 모달 -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()" aria-label="닫기">×</button>
+
+      <div class="modal-form" id="modalForm">
+        <p class="modal-eyebrow">Inquiry</p>
+        <h2 class="modal-title" id="modalTitle">함께 일해요</h2>
+
+        <div class="form-field">
+          <label class="form-label" for="fieldName">이름 *</label>
+          <input class="form-input" type="text" id="fieldName" placeholder="홍길동" autocomplete="name" />
+          <p class="form-error-msg" id="errName">이름을 입력해주세요.</p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="fieldContact">연락처 *</label>
+          <input class="form-input" type="text" id="fieldContact" placeholder="이메일 또는 전화번호" autocomplete="email" />
+          <p class="form-error-msg" id="errContact">연락처를 입력해주세요.</p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="fieldMessage">문의 내용 *</label>
+          <textarea class="form-textarea" id="fieldMessage" placeholder="어떤 일을 함께 하고 싶으신가요?"></textarea>
+          <p class="form-error-msg" id="errMessage">문의 내용을 입력해주세요.</p>
+        </div>
+
+        <button class="form-submit" id="submitBtn" onclick="submitForm()">
+          <span id="submitLabel">보내기 →</span>
+        </button>
+      </div>
+
+      <div class="modal-success" id="modalSuccess">
+        <div class="success-icon">✓</div>
+        <p class="success-title">문의가 접수되었습니다</p>
+        <p class="success-desc">소중한 연락 감사합니다.<br>빠른 시일 내에 답장드리겠습니다.</p>
+        <button class="success-close" onclick="closeModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>하모니블렌더 © 2026</p>
+    <p>Designed with intention.</p>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ── Slider ──
+    const track   = document.getElementById('sliderTrack');
+    const slides  = Array.from(track.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('slidePrev');
+    const nextBtn = document.getElementById('slideNext');
+    const counter = document.getElementById('slideCounter');
+    const total   = slides.length;
+    let current   = 0;
+
+    function pad(n) { return String(n + 1).padStart(2, '0'); }
+
+    function goTo(idx) {
+      current = idx;
+      track.scrollTo({ left: track.clientWidth * idx, behavior: 'smooth' });
+      counter.textContent = `${pad(idx)} / ${pad(total - 1)}`;
+      prevBtn.disabled    = idx === 0;
+      nextBtn.disabled    = idx === total - 1;
+    }
+
+    prevBtn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+    nextBtn.addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
+
+    let scrollTimer;
+    track.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const idx = Math.round(track.scrollLeft / track.clientWidth);
+        if (idx !== current) goTo(idx);
+      }, 80);
+    }, { passive: true });
+
+    // ── Welcome Screen ──
+    (function () {
+      const screen = document.getElementById('welcome-screen');
+      const textEl = document.getElementById('welcomeText');
+      const brand  = 'harmonyblender';
+      const speed  = 65;
+      let i = 0;
+
+      function type() {
+        if (i < brand.length) {
+          textEl.textContent = brand.slice(0, ++i);
+          setTimeout(type, speed);
+        } else {
+          return;
+        }
+      }
+
+      function dismiss() {
+        if (screen.classList.contains('fade-out')) return;
+        screen.classList.add('fade-out');
+        document.body.style.overflow = '';
+        setTimeout(() => screen.remove(), 700);
+      }
+
+      document.body.style.overflow = 'hidden';
+      setTimeout(type, 400);
+
+      screen.addEventListener('click', dismiss);
+    })();
+
+    // ── Modal ──
+    const overlay = document.getElementById('modalOverlay');
+
+    function openModal() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('fieldName').focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(resetModal, 200);
+    }
+
+    function resetModal() {
+      document.getElementById('modalForm').classList.remove('hide');
+      document.getElementById('modalSuccess').classList.remove('show');
+      ['fieldName', 'fieldContact', 'fieldMessage'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('error');
+      });
+      ['errName', 'errContact', 'errMessage'].forEach(id => {
+        document.getElementById(id).classList.remove('show');
+      });
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitLabel').textContent = '보내기 →';
+    }
+
+    function submitForm() {
+      const fields = [
+        { el: document.getElementById('fieldName'),    err: 'errName' },
+        { el: document.getElementById('fieldContact'), err: 'errContact' },
+        { el: document.getElementById('fieldMessage'), err: 'errMessage' },
+      ];
+      let valid = true;
+      fields.forEach(({ el, err }) => {
+        if (!el.value.trim()) {
+          el.classList.add('error');
+          document.getElementById(err).classList.add('show');
+          valid = false;
+        } else {
+          el.classList.remove('error');
+          document.getElementById(err).classList.remove('show');
+        }
+      });
+      if (!valid) return;
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      document.getElementById('submitLabel').textContent = '전송 중…';
+
+      setTimeout(() => {
+        document.getElementById('modalForm').classList.add('hide');
+        document.getElementById('modalSuccess').classList.add('show');
+      }, 800);
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+  </script>
+</body>
+</html>

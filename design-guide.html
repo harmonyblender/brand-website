@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Apt — Design Guide Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@400;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f5f0;
+      --white: #ffffff;
+      --black: #0a0a0a;
+      --gray-1: #1a1a1a;
+      --gray-2: #444;
+      --gray-3: #888;
+      --gray-4: #bbb;
+      --gray-5: #e2e2de;
+      --accent: #0a0a0a;
+      --font-sans: 'Noto Sans KR', sans-serif;
+      --font-serif: 'Noto Serif KR', serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--black);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--black);
+      color: white;
+      padding: 72px 80px 64px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .page-header-meta {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    .page-header h1 {
+      font-family: var(--font-sans);
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .page-header p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── SIDEBAR NAV ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      padding: 48px 32px;
+      border-right: 1px solid var(--gray-5);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--white);
+    }
+
+    .aside-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-4);
+      margin-bottom: 16px;
+    }
+
+    aside nav { display: flex; flex-direction: column; gap: 2px; }
+    aside nav a {
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--gray-3);
+      text-decoration: none;
+      padding: 6px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    aside nav a:hover {
+      color: var(--black);
+      border-color: var(--black);
+    }
+
+    /* ── MAIN ── */
+    main { padding: 64px 80px 120px; }
+
+    .guide-section { margin-bottom: 96px; }
+
+    .guide-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .section-num {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--gray-4);
+    }
+
+    .section-heading {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .subsection { margin-bottom: 48px; }
+    .subsection-title {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 20px;
+    }
+
+    /* ── COLOR SWATCHES ── */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .swatch {
+      border: 1px solid var(--gray-5);
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .swatch-color {
+      height: 80px;
+      width: 100%;
+    }
+
+    .swatch-info {
+      padding: 12px 14px;
+    }
+
+    .swatch-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gray-1);
+      margin-bottom: 4px;
+      font-family: var(--font-sans);
+    }
+
+    .swatch-hex {
+      font-size: 10px;
+      color: var(--gray-3);
+      letter-spacing: 0.08em;
+    }
+
+    .swatch-role {
+      font-size: 9px;
+      color: var(--gray-4);
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── TYPOGRAPHY SPECIMENS ── */
+    .type-specimen {
+      background: var(--white);
+      border: 1px solid var(--gray-5);
+      padding: 32px 40px;
+      margin-bottom: 8px;
+    }
+
+    .type-meta {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--gray-4);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-5);
+      display: flex;
+      gap: 24px;
+    }
+
+    .type-meta span { color: var(--gray-3); }
+    .type-meta b { color: var(--black); font-weight: 500; }
+
+    /* ── SPACING SCALE ── */
+    .spacing-scale { display: flex; flex-direction: column; gap: 8px; }
+
+    .spacing-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 80px;
+      align-items: center;
+      gap: 20px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .spacing-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--gray-3);
+    }
+
+    .spacing-bar-wrap { height: 8px; background: var(--gray-5); }
+    .spacing-bar { height: 100%; background: var(--black); }
+
+    .spacing-val {
+      font-size: 10px;
+      color: var(--gray-3);
+      text-align: right;
+    }
+
+    /* ── COMPONENT DEMOS ── */
+    .component-demo {
+      background: var(--white);
+      border: 1px solid var(--gray-5);
+      padding: 40px;
+      margin-bottom: 8px;
+    }
+
+    .component-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-4);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    /* NAV DEMO */
+    .demo-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-top: 1px solid #0a0a0a;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .demo-nav-logo {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: #0a0a0a;
+    }
+
+    .demo-nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .demo-nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #0a0a0a;
+    }
+
+    .demo-nav-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* WORKS TABLE DEMO */
+    .demo-works-table { width: 100%; border-collapse: collapse; }
+
+    .demo-works-year {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--gray-3);
+      padding: 20px 0 8px;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .demo-works-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-5);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .demo-works-row:hover { background: #f7f7f5; margin: 0 -40px; padding: 14px 40px; }
+
+    .demo-works-name {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--black);
+    }
+
+    .demo-works-category {
+      font-size: 11px;
+      color: var(--gray-3);
+      letter-spacing: 0.05em;
+      padding-right: 40px;
+    }
+
+    .demo-works-yr {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-4);
+    }
+
+    /* HERO TEXT DEMO */
+    .demo-hero-text {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      color: var(--black);
+      max-width: 640px;
+    }
+
+    /* CONTACT LINK DEMO */
+    .demo-contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--black);
+      text-decoration: none;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--black);
+    }
+
+    /* MODAL DEMO */
+    .demo-modal {
+      background: var(--black);
+      color: white;
+      padding: 32px 40px;
+      max-width: 480px;
+    }
+
+    .demo-modal-close {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+
+    .demo-modal-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+
+    .demo-modal-value {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    /* ── GRID DEMO ── */
+    .grid-diagram {
+      background: var(--white);
+      border: 1px solid var(--gray-5);
+      padding: 32px 40px;
+    }
+
+    .grid-viz {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .grid-col {
+      height: 40px;
+      background: rgba(10,10,10,0.04);
+      border: 1px solid rgba(10,10,10,0.08);
+    }
+
+    .grid-col.active { background: rgba(10,10,10,0.12); }
+
+    .grid-notes {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .grid-note-item {
+      padding: 16px;
+      border: 1px solid var(--gray-5);
+    }
+
+    .grid-note-label {
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray-4);
+      margin-bottom: 8px;
+    }
+
+    .grid-note-val {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--black);
+      font-family: var(--font-sans);
+    }
+
+    /* ── SECTION MAP ── */
+    .section-map { display: flex; flex-direction: column; gap: 0; }
+
+    .section-map-row {
+      display: grid;
+      grid-template-columns: 32px 180px 1fr;
+      align-items: start;
+      gap: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--gray-5);
+    }
+
+    .map-num {
+      font-size: 10px;
+      color: var(--gray-4);
+      padding-top: 2px;
+    }
+
+    .map-name {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--black);
+    }
+
+    .map-desc {
+      font-size: 11px;
+      color: var(--gray-3);
+      line-height: 1.6;
+    }
+
+    .map-tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--gray-5);
+      color: var(--gray-3);
+      margin-right: 6px;
+      margin-top: 8px;
+    }
+
+    /* ── ANNOTATION BOX ── */
+    .annotation {
+      background: #fffbeb;
+      border-left: 3px solid #f0c040;
+      padding: 16px 20px;
+      margin-top: 16px;
+      font-size: 11px;
+      color: #6b5a00;
+      line-height: 1.7;
+    }
+
+    .annotation strong { font-weight: 500; }
+
+    /* ── PRINCIPLE CARDS ── */
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--gray-5);
+    }
+
+    .principle-card {
+      background: var(--white);
+      padding: 32px 28px;
+    }
+
+    .principle-num {
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--gray-5);
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    .principle-title {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+
+    .principle-desc {
+      font-size: 11px;
+      color: var(--gray-3);
+      line-height: 1.8;
+    }
+
+    /* ── FOOTER ── */
+    .guide-footer {
+      border-top: 1px solid var(--gray-5);
+      padding: 32px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white);
+    }
+
+    .guide-footer p {
+      font-size: 10px;
+      color: var(--gray-4);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <p class="page-header-meta">Design Analysis Report · studioapt.kr · 2026.05.12</p>
+    <h1>Studio Apt — Design Guide</h1>
+    <p>색상 · 타이포그래피 · 레이아웃 · 섹션 구성 · 컴포넌트 패턴 분석</p>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside>
+      <p class="aside-label">목차</p>
+      <nav>
+        <a href="#principles">01. 디자인 원칙</a>
+        <a href="#colors">02. 컬러 팔레트</a>
+        <a href="#typography">03. 타이포그래피</a>
+        <a href="#spacing">04. 간격 & 여백</a>
+        <a href="#layout">05. 레이아웃 시스템</a>
+        <a href="#sections">06. 섹션 구성</a>
+        <a href="#components">07. 컴포넌트 패턴</a>
+        <a href="#interaction">08. 인터랙션</a>
+        <a href="#apply">09. 내 포트폴리오 적용</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+      <!-- 01. DESIGN PRINCIPLES -->
+      <div class="guide-section" id="principles">
+        <div class="guide-section-header">
+          <span class="section-num">01</span>
+          <h2 class="section-heading">디자인 원칙</h2>
+        </div>
+
+        <div class="principle-grid">
+          <div class="principle-card">
+            <div class="principle-num">01</div>
+            <p class="principle-title">Typography First</p>
+            <p class="principle-desc">시각적 장식을 최소화하고 텍스트 자체의 배치와 크기, 무게감으로 위계를 만든다. 이미지보다 텍스트가 먼저 읽힌다.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-num">02</div>
+            <p class="principle-title">Radical Whitespace</p>
+            <p class="principle-desc">콘텐츠 밀도를 의도적으로 낮추고, 여백이 레이아웃의 구성 요소로 기능한다. 빈 공간이 브랜드 자신감을 표현한다.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-num">03</div>
+            <p class="principle-title">Monochrome Base</p>
+            <p class="principle-desc">흑·백·회색의 스펙트럼만으로 전체 UI를 구성한다. 액센트 컬러 없음. 색이 아닌 공간과 무게로 강조한다.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-num">04</div>
+            <p class="principle-title">Editorial Grid</p>
+            <p class="principle-desc">잡지식 편집 레이아웃. 콘텐츠를 열(column)로 정렬하고, 수평선(border)이 섹션 구분의 주요 도구다.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-num">05</div>
+            <p class="principle-title">List as Design</p>
+            <p class="principle-desc">프로젝트 목록을 단순한 테이블 형식으로 표현한다. 카드·썸네일 없이 텍스트 행의 반복 자체가 시각적 리듬을 만든다.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-num">06</div>
+            <p class="principle-title">Quiet Interaction</p>
+            <p class="principle-desc">애니메이션은 없거나 최소화. 호버는 밑줄 또는 배경색 미세 변화로만 처리. 인터랙션이 시선을 분산시키지 않는다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02. COLORS -->
+      <div class="guide-section" id="colors">
+        <div class="guide-section-header">
+          <span class="section-num">02</span>
+          <h2 class="section-heading">컬러 팔레트</h2>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Primary Palette</p>
+          <div class="color-grid">
+            <div class="swatch">
+              <div class="swatch-color" style="background:#0a0a0a;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Near Black</p>
+                <p class="swatch-hex">#0a0a0a</p>
+                <p class="swatch-role">텍스트, 테두리, 아이콘</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#ffffff; border-bottom: 1px solid #e2e2de;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Pure White</p>
+                <p class="swatch-hex">#ffffff</p>
+                <p class="swatch-role">페이지 배경, 카드 배경</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#f5f5f0;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Off White</p>
+                <p class="swatch-hex">#f5f5f0</p>
+                <p class="swatch-role">섹션 배경, 호버 배경</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#e2e2de;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Light Gray</p>
+                <p class="swatch-hex">#e2e2de</p>
+                <p class="swatch-role">구분선, 테두리</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Gray Scale</p>
+          <div class="color-grid">
+            <div class="swatch">
+              <div class="swatch-color" style="background:#1a1a1a;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Dark Gray</p>
+                <p class="swatch-hex">#1a1a1a</p>
+                <p class="swatch-role">서브 헤딩</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#444444;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Mid Dark</p>
+                <p class="swatch-hex">#444444</p>
+                <p class="swatch-role">본문 텍스트</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#888888;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Mid Gray</p>
+                <p class="swatch-hex">#888888</p>
+                <p class="swatch-role">보조 텍스트, 레이블</p>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#bbbbbb;"></div>
+              <div class="swatch-info">
+                <p class="swatch-name">Light Gray</p>
+                <p class="swatch-hex">#bbbbbb</p>
+                <p class="swatch-role">비활성 텍스트, 연도</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annotation">
+          <strong>관찰:</strong> Studio Apt는 단색(모노크롬) 팔레트를 고수합니다. 어떤 브랜드 컬러나 강조 색상도 사용하지 않으며,
+          흑백 스펙트럼만으로 위계와 강약을 표현합니다. 이는 "브랜드 작업을 다루는 스튜디오로서, 자신의 아이덴티티가 클라이언트 작업을 방해하지 않는다"는
+          철학의 시각적 표현입니다.
+        </div>
+      </div>
+
+      <!-- 03. TYPOGRAPHY -->
+      <div class="guide-section" id="typography">
+        <div class="guide-section-header">
+          <span class="section-num">03</span>
+          <h2 class="section-heading">타이포그래피</h2>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Font Families</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:32px;">
+            <div class="component-demo" style="padding:24px;">
+              <p class="component-label">Latin — Likely</p>
+              <p style="font-family:'Helvetica Neue',sans-serif; font-size:22px; font-weight:300; letter-spacing:-0.01em;">Helvetica Neue</p>
+              <p style="font-size:10px; color:#888; margin-top:8px;">또는 Arial / system-ui</p>
+            </div>
+            <div class="component-demo" style="padding:24px;">
+              <p class="component-label">Korean</p>
+              <p style="font-family:'Noto Sans KR',sans-serif; font-size:22px; font-weight:300; letter-spacing:-0.01em;">노토 산스 KR</p>
+              <p style="font-size:10px; color:#888; margin-top:8px;">Noto Sans KR / 300–500</p>
+            </div>
+            <div class="component-demo" style="padding:24px;">
+              <p class="component-label">Mono — Accents</p>
+              <p style="font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:300;">IBM Plex Mono</p>
+              <p style="font-size:10px; color:#888; margin-top:8px;">연도·코드·레이블</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Type Scale & Specimens</p>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>HERO INTRO</span>
+              <b>15–16px</b>
+              <b>weight 300</b>
+              <b>line-height 1.75</b>
+              <b>letter-spacing 0.01em</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:15px; font-weight:300; line-height:1.75; letter-spacing:0.01em; color:#0a0a0a;">
+              Apt defines brands through visual language and delivers design solutions grounded in industry context and real operational environments.
+            </p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>NAV LOGO</span>
+              <b>13px</b>
+              <b>weight 400</b>
+              <b>letter-spacing 0.02em</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:400; letter-spacing:0.02em; color:#0a0a0a;">Studio Apt</p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>NAV LINKS</span>
+              <b>11px</b>
+              <b>weight 400</b>
+              <b>text-transform UPPERCASE</b>
+              <b>letter-spacing 0.12em</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:11px; font-weight:400; text-transform:uppercase; letter-spacing:0.12em; color:#0a0a0a;">WORKS &nbsp;&nbsp; INFO &nbsp;&nbsp; CONTACT</p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>PROJECT NAME</span>
+              <b>13px</b>
+              <b>weight 300</b>
+              <b>color #0a0a0a</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:13px; font-weight:300; color:#0a0a0a;">Yeobaek Object</p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>PROJECT CATEGORY</span>
+              <b>11px</b>
+              <b>weight 300</b>
+              <b>color #888</b>
+              <b>letter-spacing 0.05em</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:11px; font-weight:300; color:#888; letter-spacing:0.05em;">Ceramic Studio</p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>YEAR / MONO LABEL</span>
+              <b>11px</b>
+              <b>mono</b>
+              <b>color #bbb</b>
+            </div>
+            <p style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#bbb;">2025 &nbsp;/&nbsp; 25</p>
+          </div>
+
+          <div class="type-specimen">
+            <div class="type-meta">
+              <span>SECTION LABEL (EYEBROW)</span>
+              <b>9–10px</b>
+              <b>weight 400</b>
+              <b>UPPERCASE</b>
+              <b>letter-spacing 0.18–0.2em</b>
+            </div>
+            <p style="font-family:'Noto Sans KR',sans-serif; font-size:10px; font-weight:400; text-transform:uppercase; letter-spacing:0.2em; color:#888;">Selected Work</p>
+          </div>
+        </div>
+
+        <div class="annotation">
+          <strong>관찰:</strong> Studio Apt는 폰트 크기 스펙트럼이 매우 좁습니다 (9px–16px). 큰 디스플레이 헤딩이 없고, 모든 텍스트가 본문 크기에 가깝습니다.
+          위계는 크기보다 <strong>굵기(Light vs Regular)</strong>, <strong>색상 밝기(#0a0a0a vs #888)</strong>, <strong>자간(letter-spacing)</strong>으로 만들어집니다.
+        </div>
+      </div>
+
+      <!-- 04. SPACING -->
+      <div class="guide-section" id="spacing">
+        <div class="guide-section-header">
+          <span class="section-num">04</span>
+          <h2 class="section-heading">간격 & 여백</h2>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Spacing Scale</p>
+          <div class="spacing-scale">
+            <div class="spacing-row">
+              <span class="spacing-label">2xs</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:2%;"></div></div>
+              <span class="spacing-val">4px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">xs</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:4%;"></div></div>
+              <span class="spacing-val">8px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">sm</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:6%;"></div></div>
+              <span class="spacing-val">12px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">md</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:10%;"></div></div>
+              <span class="spacing-val">20px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">lg</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:16%;"></div></div>
+              <span class="spacing-val">32px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">xl</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:24%;"></div></div>
+              <span class="spacing-val">48px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">2xl</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:32%;"></div></div>
+              <span class="spacing-val">64px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">3xl</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:48%;"></div></div>
+              <span class="spacing-val">96px</span>
+            </div>
+            <div class="spacing-row">
+              <span class="spacing-label">4xl</span>
+              <div class="spacing-bar-wrap"><div class="spacing-bar" style="width:64%;"></div></div>
+              <span class="spacing-val">128px</span>
+            </div>
+          </div>
+
+          <div class="annotation" style="margin-top:24px;">
+            <strong>핵심 패턴:</strong> 네비게이션 상하 패딩 ~20px · 섹션 간 상하 여백 64–128px · 행(row) 간 14–20px · 페이지 좌우 여백 40–80px (뷰포트에 따라).
+            Works 목록 행의 밑선(border-bottom)이 유일한 구분 요소. 박스·그림자·라운딩 없음.
+          </div>
+        </div>
+      </div>
+
+      <!-- 05. LAYOUT -->
+      <div class="guide-section" id="layout">
+        <div class="guide-section-header">
+          <span class="section-num">05</span>
+          <h2 class="section-heading">레이아웃 시스템</h2>
+        </div>
+
+        <div class="grid-diagram">
+          <p class="component-label">12-Column Grid Visualization</p>
+          <div class="grid-viz">
+            <div class="grid-col"></div><div class="grid-col"></div>
+            <div class="grid-col active"></div><div class="grid-col active"></div>
+            <div class="grid-col active"></div><div class="grid-col active"></div>
+            <div class="grid-col active"></div><div class="grid-col active"></div>
+            <div class="grid-col active"></div><div class="grid-col active"></div>
+            <div class="grid-col"></div><div class="grid-col"></div>
+          </div>
+          <p style="font-size:10px; color:#888; margin-bottom:24px;">↑ 본문 콘텐츠: 좌우 2col 여백 + 중앙 8col 사용 (상황에 따라 10–12col 풀 와이드)</p>
+
+          <div class="grid-notes">
+            <div class="grid-note-item">
+              <p class="grid-note-label">Max Width</p>
+              <p class="grid-note-val">1408px</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">이미지 기준 (미디어 파일 경로에서 확인)</p>
+            </div>
+            <div class="grid-note-item">
+              <p class="grid-note-label">Page Padding</p>
+              <p class="grid-note-val">40–80px</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">좌우 여백, 뷰포트 반응형</p>
+            </div>
+            <div class="grid-note-item">
+              <p class="grid-note-label">Nav Height</p>
+              <p class="grid-note-val">~56–64px</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">border-top 1px solid으로 시작</p>
+            </div>
+            <div class="grid-note-item">
+              <p class="grid-note-label">Works Row Height</p>
+              <p class="grid-note-val">~48px</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">14px 상하 패딩 + 텍스트</p>
+            </div>
+            <div class="grid-note-item">
+              <p class="grid-note-label">Image Gallery</p>
+              <p class="grid-note-val">4-col Equal</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">동일한 비율 4개 이미지 나열</p>
+            </div>
+            <div class="grid-note-item">
+              <p class="grid-note-label">Info — Service</p>
+              <p class="grid-note-val">3-col Equal</p>
+              <p style="font-size:10px; color:#888; margin-top:4px;">Branding / Application / Visualizing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06. SECTION STRUCTURE -->
+      <div class="guide-section" id="sections">
+        <div class="guide-section-header">
+          <span class="section-num">06</span>
+          <h2 class="section-heading">섹션 구성</h2>
+        </div>
+
+        <div class="subsection">
+          <p class="subsection-title">Home Page (/) — Section Map</p>
+          <div class="section-map">
+            <div class="section-map-row">
+              <span class="map-num">01</span>
+              <span class="map-name">Navigation</span>
+              <div>
+                <p class="map-desc">상단 고정. "Studio Apt" 로고 좌측, WORKS / INFO / CONTACT 우측. border-top 1px solid #0a0a0a로 시작. 최상단 포지션. 스크롤 시 고정 유지.</p>
+                <span class="map-tag">fixed</span>
+                <span class="map-tag">horizontal</span>
+                <span class="map-tag">border-top</span>
+              </div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">02</span>
+              <span class="map-name">Hero / Intro</span>
+              <div>
+                <p class="map-desc">스튜디오 미션 스테이트먼트 단일 문단. 최대 너비 제한 없음. 큰 여백과 함께 텍스트가 홀로 위치. 이미지 갤러리 상단.</p>
+                <span class="map-tag">text-only</span>
+                <span class="map-tag">large-padding</span>
+              </div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">03</span>
+              <span class="map-name">Image Gallery</span>
+              <div>
+                <p class="map-desc">1408px 너비 이미지 4장. 균등한 4열 그리드. 캡션·오버레이 없음. 갭 없이 붙어있거나 최소 갭.</p>
+                <span class="map-tag">4-col grid</span>
+                <span class="map-tag">full-bleed</span>
+              </div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">04</span>
+              <span class="map-name">Works List</span>
+              <div>
+                <p class="map-desc">연도(2025–2019)별 그룹핑. 각 항목: 프로젝트명 | 카테고리 | 연도. 테이블 스타일 행 목록. 호버 시 배경 미세 변화. 60+ 프로젝트 엔트리.</p>
+                <span class="map-tag">tabular</span>
+                <span class="map-tag">grouped by year</span>
+                <span class="map-tag">hover</span>
+              </div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">05</span>
+              <span class="map-name">Contact CTA</span>
+              <div>
+                <p class="map-desc">협업 제안 문구 (한/영 이중 언어). 이메일 주소 (클릭 시 클립보드 복사). 간결한 텍스트 블록.</p>
+                <span class="map-tag">bilingual</span>
+                <span class="map-tag">copy-to-clipboard</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection" style="margin-top:48px;">
+          <p class="subsection-title">Information Page (/information) — Section Map</p>
+          <div class="section-map">
+            <div class="section-map-row">
+              <span class="map-num">01</span>
+              <span class="map-name">About</span>
+              <div><p class="map-desc">스튜디오 소개 본문. logic & emotion 키워드. 긴 문단 텍스트.</p></div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">02</span>
+              <span class="map-name">Workscope</span>
+              <div><p class="map-desc">작업 범위 설명. 브랜딩 전 과정 커버.</p></div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">03</span>
+              <span class="map-name">Members / Team</span>
+              <div><p class="map-desc">팀원 목록. 텍스트 리스트 형식. 이름·역할.</p></div>
+            </div>
+            <div class="section-map-row">
+              <span class="map-num">04</span>
+              <span class="map-name">Service</span>
+              <div>
+                <p class="map-desc">3열 그리드: Branding / Application / Visualizing. 각 열에 서비스 상세 설명.</p>
+                <span class="map-tag">3-col</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 07. COMPONENTS -->
+      <div class="guide-section" id="components">
+        <div class="guide-section-header">
+          <span class="section-num">07</span>
+          <h2 class="section-heading">컴포넌트 패턴</h2>
+        </div>
+
+        <!-- Navigation -->
+        <div class="subsection">
+          <p class="subsection-title">Navigation Bar</p>
+          <div class="component-demo">
+            <p class="component-label">Pattern Demo</p>
+            <div class="demo-nav">
+              <span class="demo-nav-logo">Studio Apt</span>
+              <ul class="demo-nav-links">
+                <li><a href="#">Works</a></li>
+                <li><a href="#">Info</a></li>
+                <li><a href="#">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="annotation">
+            border-top 1px solid #0a0a0a / border-bottom 1px solid #e5e5e5 · 배경 없음(투명) · 로고: font-weight 400 · 링크: uppercase, letter-spacing 0.12em · 호버: text-decoration underline
+          </div>
+        </div>
+
+        <!-- Works Row -->
+        <div class="subsection">
+          <p class="subsection-title">Works List Row</p>
+          <div class="component-demo">
+            <p class="component-label">Pattern Demo — 연도 헤더 + 항목 행</p>
+            <div>
+              <p class="demo-works-year">2025</p>
+              <div class="demo-works-row">
+                <span class="demo-works-name">Yeobaek Object</span>
+                <span class="demo-works-category">Ceramic Studio</span>
+                <span class="demo-works-yr">25</span>
+              </div>
+              <div class="demo-works-row">
+                <span class="demo-works-name">Nopublic</span>
+                <span class="demo-works-category">Eyewear</span>
+                <span class="demo-works-yr">25</span>
+              </div>
+              <div class="demo-works-row">
+                <span class="demo-works-name">Maison Margiela</span>
+                <span class="demo-works-category">Café</span>
+                <span class="demo-works-yr">24</span>
+              </div>
+            </div>
+          </div>
+          <div class="annotation">
+            grid-template-columns: 1fr auto auto · 행 높이 ~48px · border-bottom 1px solid #e2e2de · 호버: 배경 #f7f7f5 · 카테고리 right-padding 40px · 연도: monospace, #bbb
+          </div>
+        </div>
+
+        <!-- Contact Modal -->
+        <div class="subsection">
+          <p class="subsection-title">Contact Overlay / Modal</p>
+          <div class="component-demo">
+            <p class="component-label">Pattern Demo</p>
+            <div class="demo-modal">
+              <p class="demo-modal-close">Close ✕</p>
+              <p class="demo-modal-label">Email</p>
+              <p class="demo-modal-value">contact@studioapt.kr</p>
+              <p class="demo-modal-label">Instagram</p>
+              <p class="demo-modal-value">@studioapt.kr</p>
+            </div>
+          </div>
+          <div class="annotation">
+            배경: #0a0a0a (full-screen 또는 overlay) · 텍스트: white · 이메일 클릭 시 클립보드 복사 + "Copied!" 피드백 · Close 버튼: uppercase, 작은 크기
+          </div>
+        </div>
+
+        <!-- Hero Text -->
+        <div class="subsection">
+          <p class="subsection-title">Hero Statement Text</p>
+          <div class="component-demo">
+            <p class="component-label">Pattern Demo</p>
+            <p class="demo-hero-text">
+              Apt defines brands through visual language and delivers design solutions grounded in industry context and real operational environments.
+            </p>
+          </div>
+          <div class="annotation">
+            font-size 15px · font-weight 300 · line-height 1.75 · max-width ~640px · 장식 없음 · 이탤릭·볼드 혼용 없음
+          </div>
+        </div>
+
+        <!-- Contact Link -->
+        <div class="subsection">
+          <p class="subsection-title">Email CTA Link</p>
+          <div class="component-demo">
+            <p class="component-label">Pattern Demo</p>
+            <a class="demo-contact-email" href="#">contact@studioapt.kr</a>
+          </div>
+          <div class="annotation">
+            border-bottom 1px solid #0a0a0a · padding-bottom 2px · 버튼이 아닌 밑줄 텍스트 링크 · 클릭 시 클립보드 복사
+          </div>
+        </div>
+      </div>
+
+      <!-- 08. INTERACTION -->
+      <div class="guide-section" id="interaction">
+        <div class="guide-section-header">
+          <span class="section-num">08</span>
+          <h2 class="section-heading">인터랙션 패턴</h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="component-demo">
+            <p class="component-label">Hover — Works Row</p>
+            <p style="font-size:12px; color:#444; line-height:1.8;">
+              배경색 변화: transparent → #f7f7f5<br/>
+              transition: background 0.15s<br/>
+              커서: pointer<br/>
+              텍스트 색 변화 없음
+            </p>
+          </div>
+          <div class="component-demo">
+            <p class="component-label">Hover — Nav Links</p>
+            <p style="font-size:12px; color:#444; line-height:1.8;">
+              text-decoration: underline<br/>
+              text-underline-offset: 3px<br/>
+              색 변화 없음<br/>
+              transition 없음 (즉시)
+            </p>
+          </div>
+          <div class="component-demo">
+            <p class="component-label">Click — Email Copy</p>
+            <p style="font-size:12px; color:#444; line-height:1.8;">
+              navigator.clipboard.writeText()<br/>
+              텍스트 → "Copied!" 로 순간 변경<br/>
+              ~1.5s 후 원래 텍스트로 복귀<br/>
+              애니메이션 없음
+            </p>
+          </div>
+          <div class="component-demo">
+            <p class="component-label">Open — Contact Modal</p>
+            <p style="font-size:12px; color:#444; line-height:1.8;">
+              CONTACT 클릭 시 오버레이 표시<br/>
+              배경 어둡게 (또는 풀스크린 블랙)<br/>
+              Close 버튼으로 닫기<br/>
+              fade 또는 즉시 전환 (애니메이션 최소)
+            </p>
+          </div>
+        </div>
+
+        <div class="annotation" style="margin-top:16px;">
+          <strong>패턴 요약:</strong> 애니메이션이 거의 없음. 트랜지션은 0.15s 이하의 빠른 변화만. 스크롤 인터랙션 없음.
+          로딩 스피너·스켈레톤 없음. 상태 피드백은 텍스트로만("Copied!"). 사용자의 주의를 UI가 아닌 콘텐츠(작업물)에 집중시키는 철학.
+        </div>
+      </div>
+
+      <!-- 09. APPLY -->
+      <div class="guide-section" id="apply">
+        <div class="guide-section-header">
+          <span class="section-num">09</span>
+          <h2 class="section-heading">내 포트폴리오 적용 포인트</h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="component-demo">
+            <p class="component-label">현재 내 포트폴리오 → 개선 방향</p>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+              <div style="padding:12px; background:#f5f5f0; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">Hero 폰트 크기</b><br/>
+                현재: 7rem 대형 디스플레이 타입<br/>
+                Studio Apt 방식: 15px 보통 크기 본문 → 텍스트 자체로 승부<br/>
+                <span style="color:#888;">→ 큰 Hero를 유지하되 font-weight 300으로 가볍게</span>
+              </div>
+              <div style="padding:12px; background:#f5f5f0; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">프로젝트 갤러리</b><br/>
+                현재: 카드 + 호버 오버레이<br/>
+                Studio Apt 방식: 텍스트 행 목록<br/>
+                <span style="color:#888;">→ 이미지 중심 갤러리 + 리스트 뷰 토글 추가 고려</span>
+              </div>
+              <div style="padding:12px; background:#f5f5f0; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">스킬 섹션 배경</b><br/>
+                현재: 검정 배경 (dark section)<br/>
+                Studio Apt 방식: 단일 배경 (흰색 유지)<br/>
+                <span style="color:#888;">→ 배경 전환 제거하고 선(border)으로만 구분</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="component-demo">
+            <p class="component-label">Studio Apt에서 차용할 요소</p>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+              <div style="padding:12px; border-left:2px solid #0a0a0a; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">Works 테이블 형식</b><br/>
+                프로젝트명 | 카테고리 | 연도 3열 구조로 목록 섹션 추가. 스크롤 시 리듬감.
+              </div>
+              <div style="padding:12px; border-left:2px solid #0a0a0a; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">Border-based 구분</b><br/>
+                박스·그림자 대신 border-bottom 1px solid로 섹션과 행 구분. 더 깔끔하고 편집적.
+              </div>
+              <div style="padding:12px; border-left:2px solid #0a0a0a; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">Eyebrow 레이블</b><br/>
+                10px uppercase letter-spacing 0.2em 섹션 레이블. 이미 적용 중이나 더 강화 가능.
+              </div>
+              <div style="padding:12px; border-left:2px solid #0a0a0a; font-size:11px; color:#444; line-height:1.7;">
+                <b style="color:#0a0a0a;">모노크롬 강화</b><br/>
+                현재 Hero, Skills 섹션의 검정 배경 제거하고 흰 배경 단일화. 더 편집지 느낌.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="guide-footer">
+    <p>Studio Apt (studioapt.kr) Design Analysis — 분석 기준일 2026.05.12</p>
+    <p>WebFetch 기반 구조 분석 · CSS 직접 접근 불가로 일부 수치는 추정값</p>
+  </div>
+
+</body>
+</html>
